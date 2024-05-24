@@ -4,14 +4,15 @@ import { signInWithPopup } from 'firebase/auth'
 import { useNavigate } from "react-router-dom";
 
 export default function Login({setIsAuth}) {
-    //let navigate = useNavigate()         
+    let navigate = useNavigate()         
 
+    //sign in 
         const signInWithGoogle = () => {
             signInWithPopup(auth, provider).then(result => {
                 localStorage.setItem("isAuth" , true)
                 setIsAuth(true)
-                //navigate("/")
-            })
+                navigate("/") // or window.location.pathname = "/"
+            }, console.log("sign in was unsuccessful"))
        
     }
     return (
