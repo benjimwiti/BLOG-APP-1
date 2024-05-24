@@ -7,14 +7,15 @@ export default function Login({setIsAuth}) {
     let navigate = useNavigate()         
 
     //sign in 
-        const signInWithGoogle = () => {
-            signInWithPopup(auth, provider).then(result => {
+        const signInWithGoogle = async () => {
+            const result = await signInWithPopup(auth, provider)
+                console.log(result)
                 localStorage.setItem("isAuth" , true)
                 setIsAuth(true)
                 navigate("/") // or window.location.pathname = "/"
-            }, console.log("sign in was unsuccessful"))
+            } /* console.log("sign in was unsuccessful") */
        
-    }
+    
     return (
         <>
             <p className="p-el"> LOGIN </p>
