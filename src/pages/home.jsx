@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
-import { getDocs} from "firebase/firestore";
+import { getDocs , deleteDoc, doc} from "firebase/firestore";
 import { createNewPostRef } from "../firebase-config";
+
 
 
 export default function Home() {
@@ -23,7 +24,12 @@ export default function Home() {
         }
         getPosts()
         console.log(postsList)
-    }, [count])
+    }, [postsList])
+
+    async function deletePost(id) {
+        const postDoc = doc(createNewPostRef, id)
+        await deleteDoc(postDoc)
+    }
 
     const postElements = postsList.map(post => {
        return( 
@@ -31,16 +37,22 @@ export default function Home() {
             <div className="user-info-container">{post.author.name}</div>
             <div className="blog-title">{post.blogTitle}</div>
             <div className="blog-text">{post.blogText}</div>
+
+            <div className="delete-btn-container">
+                <button className="delete-btn" onClick={() => deletePost(post.id)}>
+                    &#128686;
+                </button>
+            </div>
         </div>
        )
     })
     return (
         <>
             <main>
-            <p className="p-el">HOME PAGE</p>
-            {postElements}
+                <p className="p-el">HOME PAGE</p>
+                {postElements}
             </main>
-            <button onClick={()=> setCount(count => count++)}>count</button>
+                <button onClick={()=> setCount(count => count++)}>count</button>
             <footer></footer>
         </>
     )
