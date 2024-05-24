@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Home from "./pages/home"
 import Login from "./pages/login"
-import Main from "./pages/mainP"
+import Main from "./pages/create-post"
 
 import { signOut } from 'firebase/auth'
 import {auth} from './firebase-config'
