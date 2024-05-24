@@ -66,3 +66,9 @@ a:hover {
   justify-content: center;
   align-items: center;
 }
+
+.blog-card {
+  border: 1px solid black;
+  border-radius: 4px;
+  margin: 1rem;
+}
