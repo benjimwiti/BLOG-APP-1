@@ -45,7 +45,7 @@ export default function Home() {
         const authorId = post.author.id
        return( 
        <div key={post.id} className="blog-card">
-            <div className="user-info-container">{post.author.name}</div>
+            <div className="user-info-container">@{post.author.name}</div>
             <div className="blog-title">{post.blogTitle}</div>
             <div className="blog-text">{post.blogText}</div>
 
@@ -67,12 +67,15 @@ export default function Home() {
 
     return (
         <>
-            <main>
+            <main className="page-body">
                 <p className="p-el">HOME PAGE</p>
-                {postElements}
+                <div className="blog-posts"> 
+                    {postElements}
+                </div>
             </main>
-                <button onClick={()=> setCount(count => count++)}>count</button>
-            <footer></footer>
+            <button onClick={()=> setCount(count => count++)}>count</button>
+            <footer>
+            </footer>
         </>
     )
 }

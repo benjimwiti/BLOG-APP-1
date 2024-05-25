@@ -21,7 +21,7 @@ export default function Login({setIsAuth}) {
             <p className="p-el"> LOGIN </p>
             <section className="login-body">
                 <div>sign in with google</div>
-                <button /* className = "login-with-google-btn" */ onClick={signInWithGoogle} >google sign in </button>
+                <button className = "login-with-google-btn" onClick={signInWithGoogle} >google sign in </button>
             </section>
         </>
 
