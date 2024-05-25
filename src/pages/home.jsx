@@ -16,6 +16,7 @@ export default function Home() {
 
     const [postsList, setPostsList] = useState([])
     const [count, setCount] = useState(0)
+    const [search, setSearch] = useState("")
 
     // SYNCING LOCAL STATE TO FIRESTORE
 
@@ -71,42 +72,49 @@ export default function Home() {
 
     //INDIVIDUAL POST -you want to change sth about the individual post
     console.log(userId, )
-    const postElements = postsList.map(post => {
-        const authorId = post.author.id
-       return( 
-       <div key={post.id} className="blog-card">
-            <div className="user-info-container">@{post.author.name}</div>
-            <div className="blog-title">{post.blogTitle}</div>
-            <div className="blog-text">{post.blogText}</div>
+   // Filter posts based on the search term
+    const filteredPosts = postsList.filter(post =>
+    post.blogTitle.toLowerCase().includes(search.toLowerCase())
+      );
 
-            <div className="delete-btn-container">
-
-
-               {
-                isAuth &&
-                userId === authorId && 
-                <>
-                    <button className="delete-btn" onClick={() => deletePost(post.id)}>
-                        &#128686;
-                    </button>
-
-                    <button className="edit-btn" >
-                       <Link to={`/edit-post/${post.id}`} className="edit-link">
-                        Edit
-                       </Link> 
-                    </button>
-                </>
-                }
-
+    // Map over the filtered posts
+    const postElements = filteredPosts.map(post => {
+        const authorId = post.author.id;
+        return (
+            <div key={post.id} className="blog-card">
+                <div className="user-info-container">@{post.author.name}</div>
+                <div className="blog-title">{post.blogTitle}</div>
+                <div className="blog-text">{post.blogText}</div>
+                <div className="delete-btn-container">
+                    {isAuth && userId === authorId && (
+                        <>
+                            <button className="delete-btn" onClick={() => deletePost(post.id)}>
+                                &#128686;
+                            </button>
+                            <button className="edit-btn">
+                                <Link to={`/edit-post/${post.id}`} className="edit-link">
+                                    Edit
+                                </Link>
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
-       )
-    })
+        );
+    });
+
+
 
     return (
         <>
             <main className="page-body">
                 <p className="p-el">HOME PAGE</p>
+                <form >
+                    <input onChange={(e=>{setSearch(e.target.value)})} 
+                    placeholder="Search Blog by title"                
+                />
+                    
+                </form>
                 <div className="blog-posts"> 
                     {postElements}
                 </div>
