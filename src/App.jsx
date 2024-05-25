@@ -25,7 +25,7 @@ function Layout () {
 }
 
 function App() {
-    const loggedIn = localStorage.getItem('isAuth') || false 
+    const loggedIn= () => localStorage.getItem('isAuth') || false 
     const [isAuth , setIsAuth] = useState(loggedIn)
     console.log(loggedIn)
     //if()
