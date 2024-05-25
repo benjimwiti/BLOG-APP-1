@@ -36,12 +36,15 @@ export default function Home() {
     })
     return (
         <>
-            <main>
-            <p className="p-el">HOME PAGE</p>
-            {postElements}
+            <main className="page-body">
+                <p className="p-el">HOME PAGE</p>
+                <div className="blog-posts"> 
+                    {postElements}
+                </div>
             </main>
             <button onClick={()=> setCount(count => count++)}>count</button>
-            <footer></footer>
+            <footer>
+            </footer>
         </>
     )
 }
