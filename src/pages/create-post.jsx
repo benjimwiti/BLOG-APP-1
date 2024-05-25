@@ -36,24 +36,29 @@ export default function CreatePost() {
 
     return (
         <>
-        <p className="p-el"> MAIN </p>
-        <div className="create-blog-container">
-            <div className="title-container">
-                <label htmlFor="blog-title">Blog Title</label>
-                <input type="text" id="blog-title" placeholder="blog-title" onChange={(event) => {
-                    setBlogTitle(updateCurrentText(event))
-                } } />
-            </div>
+        {/* <p className="p-el"> MAIN </p> */}
+        <main className='create-post-page-area'>
+            <div className="create-blog-container">
+                <div className="title-container">
+                    <label htmlFor="blog-title">Blog Title</label>
+                    <input type="text" id="blog-title" placeholder="blog-title" className='create-blog-title-text' onChange={(event) => {
+                        setBlogTitle(updateCurrentText(event))
+                    } } />
+                </div>
 
-            <div className="blog-text">
-                <label htmlFor="blog-text">What's on your mind?</label>
-                <textarea type="text" placeholder="blog-text" rows="10" cols="30" onChange={(event) => {
-                    setBlogText(updateCurrentText(event))
-                } } />
-            </div>
+                <div className="blog-text">
+                    <label htmlFor="blog-text">Tell your story</label>
+                    <textarea type="text" placeholder="blog-text" rows="10" cols="30" className='create-blog-textarea' onChange={(event) => {
+                        setBlogText(updateCurrentText(event))
+                    } } />
+                </div>
 
-            <button className="submit-post" onClick={createNewPostFn}>post</button>
-        </div>
+                
+            </div>
+            <div className="submit-post-container">
+                <button className='submit-post-button' onClick={createNewPostFn}>PUBLISH</button> 
+            </div>
+        </main>
         </>
     )
 }

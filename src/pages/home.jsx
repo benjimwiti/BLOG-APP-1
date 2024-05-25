@@ -68,7 +68,7 @@ export default function Home() {
        <div key={post.id} className="blog-card">
             <div className="user-info-container">@{post.author.name}</div>
             <div className="blog-title">{post.blogTitle}</div>
-            <div className="blog-text">{post.blogText}</div>
+            <p className="blog-text home-blog-text">{post.blogText}</p>
 
             <div className="delete-btn-container">
 

@@ -49,17 +49,74 @@ a:hover {
   color: blue;
 }
 
+.create-post-page-area{ 
+  width: fit-content;
+  width: clamp(600px, 80vw, 920px);
+  margin: 8rem auto;
+}
 .create-blog-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px ;
-  margin-top: 1rem;
-  border: 1px solid black;
+  width: inherit;
   padding: 1rem;
+  background-color: whitesmoke;
+  border-radius: 15px;
+  box-shadow: 0px 2px 3px 2px whitesmoke;
 }
 
+.title-container {
+  display: flex;
+  flex-flow: column wrap;
+  width: inherit;
+  padding: 0 1.5rem;
+  flex-grow: 1;
+}
+
+.blog-text {
+  display: flex;
+  flex-flow: column nowrap;
+  width: inherit;
+  padding: 0 1.5rem;
+  flex-grow: 4;
+  overflow-y: auto;
+  
+}
+.home-blog-text {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  background-color: rgba(245, 245, 245, 0.24);
+  margin: 0.5rem 0;
+  height: 220px;
+}
+.create-blog-textarea{
+  flex-grow: 2;
+  margin: 1rem 0;
+  padding: 4px;
+  &:focus-within{
+    outline: none ;
+  }
+}
+.create-blog-title-text{
+  &:focus-within{
+    outline: none ;
+  }
+}
+.submit-post-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.submit-post-button{
+  padding: 0.5rem 1rem;
+  font-weight: bolder;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
 .error-specs-page {
   background-color: black;
   color: wheat;
@@ -109,7 +166,14 @@ a:hover {
 @media (max-width: 768px) {
   .blog-posts{
     grid-template-columns: 1fr;
-}
+  }
+  .create-post-page-area{
+    width: 95%;
+    height: 70vh;
+  }
+  .title-container, .blog-text{
+    margin: 0;
+  }
 }
 
 .user-info-container {
