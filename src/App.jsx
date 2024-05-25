@@ -5,6 +5,7 @@ import Home from "./pages/home"
 import Login from "./pages/login"
 import Main from "./pages/create-post"
 import ErrorSpecs from './pages/error-specs'
+import AIchat from './pages/chat-bot'
 
 import { signOut } from 'firebase/auth'
 import {auth} from './firebase-config'
@@ -57,6 +58,7 @@ function App() {
             <Link to="/login" > Login </Link> :
           <>
             <Link to="/create-post" > Create New post </Link>
+            <Link className='chat-bot-btn' to ="/chat-bot" > AI chat </Link>
             <button className='sign-out-btn' onClick={signOutfn} > Sign Out</button>
           </>
           }
@@ -68,6 +70,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
           <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/chat-bot" element={<AIchat />} />
           <Route path = '*' element = {<ErrorSpecs errorInfoProp={errorInfo}/>} />
 
       </Routes>

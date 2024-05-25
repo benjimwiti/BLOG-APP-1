@@ -147,3 +147,12 @@ a:hover {
   gap: 3rem;
 }
 
+.chat-bot-btn {
+  border: wheat;
+  font-size: large;
+  &:hover {
+    opacity: 0.5;
+  }
+  transition: all 0.3s;
+}
+
