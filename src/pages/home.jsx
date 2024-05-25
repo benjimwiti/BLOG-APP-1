@@ -4,6 +4,8 @@ import { createNewPostRef , auth } from "../firebase-config";
 import App from "../App";
 import { BrowserRouter as Router , Routes , Route , Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import LikeButton from "./LikeButton";
+import Comments from "./Comments";
 
 const isAuth = localStorage.getItem("isAuth") || ""
 
@@ -85,6 +87,10 @@ export default function Home() {
                 <div className="user-info-container">@{post.author.name}</div>
                 <div className="blog-title">{post.blogTitle}</div>
                 <div className="blog-text">{post.blogText}</div>
+                <div className="like-comment-container">
+                    <LikeButton post={post} />
+                    <Link to={`/post/${post.id}`}>Comments</Link>
+                </div>
                 <div className="delete-btn-container">
                     {isAuth && userId === authorId && (
                         <>

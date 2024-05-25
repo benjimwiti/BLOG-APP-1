@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Home from "./pages/home"
 import Login from "./pages/login"
+import Comments from './pages/Comments';
+
 import Main from "./pages/create-post"
 import ErrorSpecs from './pages/error-specs'
 import AIchat from './pages/chat-bot'
@@ -74,6 +76,8 @@ function App() {
           <Route path="/chat-bot" element={<AIchat />} />
           <Route path="/edit-post/:postId" element={<EditPost />} />
           <Route path = '*' element = {<ErrorSpecs errorInfoProp={errorInfo}/>} />
+          <Route path="/post/:postId" element={<Comments />} />
+          <Route path="/edit-post/:postId" element={<EditPost />} />
 
       </Routes>
     
