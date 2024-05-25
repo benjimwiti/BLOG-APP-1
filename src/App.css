@@ -156,3 +156,14 @@ a:hover {
   transition: all 0.3s;
 }
 
+.edit-btn{
+  font-size: large;
+}
+
+.edit-post-page {
+  color: whitesmoke;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+
+}

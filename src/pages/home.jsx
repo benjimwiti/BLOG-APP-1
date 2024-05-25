@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import { getDocs , deleteDoc, doc, onSnapshot} from "firebase/firestore";
 import { createNewPostRef , auth } from "../firebase-config";
 import App from "../App";
+import { BrowserRouter as Router , Routes , Route , Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const isAuth = localStorage.getItem("isAuth") || ""
 
@@ -48,8 +50,10 @@ export default function Home() {
                    
                     }
                 ))
-                //const sortedArray = simplePostsArray.sort((a, b), )
+                const sortedArray = simplePostsArray.sort((a, b) => b.createdAt - a.createdAt )
                 setPostsList(simplePostsArray)
+                //setPostsList(sortedArray)
+                console.log(sortedArray)
             })
             return unsubscribe
         },[])
@@ -60,6 +64,11 @@ export default function Home() {
         await deleteDoc(postDoc)
     }
 
+    const navigate = useNavigate()
+    
+
+    
+
     //INDIVIDUAL POST -you want to change sth about the individual post
     console.log(userId, )
     const postElements = postsList.map(post => {
@@ -69,16 +78,24 @@ export default function Home() {
             <div className="user-info-container">@{post.author.name}</div>
             <div className="blog-title">{post.blogTitle}</div>
             <div className="blog-text">{post.blogText}</div>
-
+            
             <div className="delete-btn-container">
 
 
                {
                 isAuth &&
                 userId === authorId && 
-                <button className="delete-btn" onClick={() => deletePost(post.id)}>
-                    &#128686;
-                </button>
+                <>
+                    <button className="delete-btn" onClick={() => deletePost(post.id)}>
+                        &#128686;
+                    </button>
+
+                    <button className="edit-btn" >
+                       <Link to={`/edit-post/${post.id}`} className="edit-link">
+                        Edit
+                       </Link> 
+                    </button>
+                </>
                 }
 
             </div>
