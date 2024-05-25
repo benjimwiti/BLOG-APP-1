@@ -18,15 +18,16 @@ export default function CreatePost() {
     //at firease config js destructure the display name from the current user auth object
     const createNewPostFn = async () => { 
         await addDoc(createNewPostRef ,
-             {
+             { //on clicking post the data in state is sent out /
                  blogTitle,
                  blogText, 
                  author:
                  {name: userName, id: userId }  
                 })
-                navigate("/")
+                navigate("/") //re-runs the use-effect for rendering display
 
     }
+
     const updateCurrentText = (event) => {
         const currentText = event.target.value
         console.log(currentText)

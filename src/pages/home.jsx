@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { getDocs , deleteDoc, doc} from "firebase/firestore";
+import { getDocs , deleteDoc, doc, onSnapshot} from "firebase/firestore";
 import { createNewPostRef , auth } from "../firebase-config";
 import App from "../App";
 
@@ -16,23 +16,44 @@ export default function Home() {
     const [count, setCount] = useState(0)
 
     // SYNCING LOCAL STATE TO FIRESTORE
-    useEffect (()=> {
-        //setCount(count => count + 1)
-        const getPosts = async () => {
-            const postData = await getDocs(createNewPostRef)
-            const complexPostsArray = postData.docs
-            const simplePostsArray = complexPostsArray.map(post => (
-                {
-                ...post.data() ,
-                id : post.id
-               
-                }
-            ))
-            setPostsList(simplePostsArray)
-        }
-        getPosts()
-        console.log(postsList)
-    }, [/* postsList */])
+
+    // const getPosts = async () => {
+    //     const postData = await getDocs(createNewPostRef)
+    //     const complexPostsArray = postData.docs
+    //     const simplePostsArray = complexPostsArray.map(post => (
+    //         {
+    //         ...post.data() ,
+    //         id : post.id
+           
+    //         }
+    //     ))
+    //     setPostsList(simplePostsArray)
+    // }
+
+    // useEffect (()=> {
+    //     //setCount(count => count + 1)
+    //     getPosts()
+    //     console.log(postsList)
+    //     return () => console.log("cleaning up")
+    // }, [/* postsList */])
+
+    
+        useEffect(() => {
+            const unsubscribe = onSnapshot(createNewPostRef, (onSnapshot)=> {
+                const complexPostsArray = onSnapshot.docs
+                const simplePostsArray = complexPostsArray.map(post => (
+                    {
+                    ...post.data() ,
+                    id : post.id
+                   
+                    }
+                ))
+                //const sortedArray = simplePostsArray.sort((a, b), )
+                setPostsList(simplePostsArray)
+            })
+            return unsubscribe
+        },[])
+   
 
     async function deletePost(id) {
         const postDoc = doc(createNewPostRef, id)
