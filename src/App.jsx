@@ -6,6 +6,7 @@ import Login from "./pages/login"
 import Main from "./pages/create-post"
 import ErrorSpecs from './pages/error-specs'
 import AIchat from './pages/chat-bot'
+import EditPost from './pages/edit-post'
 
 import { signOut } from 'firebase/auth'
 import {auth} from './firebase-config'
@@ -71,6 +72,7 @@ function App() {
           <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/chat-bot" element={<AIchat />} />
+          <Route path="/edit-post/:postId" element={<EditPost />} />
           <Route path = '*' element = {<ErrorSpecs errorInfoProp={errorInfo}/>} />
 
       </Routes>

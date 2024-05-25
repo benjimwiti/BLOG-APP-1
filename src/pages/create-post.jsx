@@ -4,6 +4,7 @@ import { createNewPostRef , auth} from "../firebase-config";
 import { addDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { update } from "firebase/database";
 
 
 
@@ -22,7 +23,9 @@ export default function CreatePost() {
                  blogTitle,
                  blogText, 
                  author:
-                 {name: userName, id: userId }  
+                 {name: userName, id: userId },
+                 createdAt :  Date.now() ,
+                 updatedAt :  Date.now()
                 })
                 navigate("/") //re-runs the use-effect for rendering display
 
