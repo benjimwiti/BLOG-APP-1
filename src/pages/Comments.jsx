@@ -10,12 +10,13 @@ export default function Comments() {
     const userName = auth.currentUser ? auth.currentUser.displayName : false;
     const userId = auth.currentUser ? auth.currentUser.uid : false;
 
+    const fetchPost = async () => {
+        const postDoc = doc(createNewPostRef, postId);
+        const postData = await getDoc(postDoc);
+        setPost({ id: postId, ...postData.data() });
+    };
+
     useEffect(() => {
-        const fetchPost = async () => {
-            const postDoc = doc(createNewPostRef, postId);
-            const postData = await getDoc(postDoc);
-            setPost({ id: postId, ...postData.data() });
-        };
         fetchPost();
     }, [postId]);
 
@@ -26,11 +27,12 @@ export default function Comments() {
             comments: arrayUnion({ userId, userName, text: newComment, createdAt: new Date() })
         });
         setNewComment("");
+        fetchPost(); // Refetch post to update comments
     };
 
     // Comments for displaying post comments
     const commentsContent = post?.comments?.map((comment, index) => (
-        <div key={index}>
+        <div key={index} className="comment">
             <strong>{comment.userName}</strong>: {comment.text}
         </div>
     ));

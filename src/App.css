@@ -231,3 +231,11 @@ a:hover {
   flex-direction: column;
 
 }
+.blog-text {
+  max-height: 100px;
+  overflow-y: auto; 
+}
+
+.comment {
+  color: white;
+}
