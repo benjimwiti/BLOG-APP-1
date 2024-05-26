@@ -3,8 +3,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doc, getDoc , updateDoc } from "firebase/firestore";
 import { createNewPostRef } from "../firebase-config";
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css';
+import { useNavigate } from "react-router-dom";
+
 
 function EditPost() { 
+    const navigate = useNavigate()
     
     const {postId} = useParams()
     const [postObject , setPostObject] = useState(null)
@@ -23,10 +28,12 @@ function EditPost() {
                 const postDoc = doc(createNewPostRef, postId);
                 const postSnapShot = await getDoc(postDoc);
                 console.log(postSnapShot.data())
-                const postObjectSnap = postSnapShot.data()
+                //const postObjectSnap = postSnapShot.data()
                 
                 if (postSnapShot.exists()) {
-                    setPostObject(postObjectSnap);
+                    setPostObject(postSnapShot.data());
+                    setTitleEdit(postObject.blogTitle)
+                    setTextEdit(postObject.blogText)
                 } else {
                     console.log("Post not found!");
                 }
@@ -38,8 +45,6 @@ function EditPost() {
             
         }
         fetchPostList()
-        setTitleEdit(postObject.blogTitle)
-        setTextEdit(postObject.blogText)
     },[])
     console.log(postId)
 //     const handlePostFetch = async () => {
@@ -59,9 +64,11 @@ function EditPost() {
         const postDoc = doc(createNewPostRef, postId)
         const postUpdate = async () => await updateDoc(postDoc, {
             blogTitle: titleEdit,
-            blogText: textEdit
+            blogText: textEdit,
+            updatedAt : Date.now()
         })
         postUpdate()
+        navigate('/')
     };
 
     
@@ -74,7 +81,12 @@ function EditPost() {
                     <input type="text" id="edited-title" value={titleEdit}  onChange={(e) => setTitleEdit(e.target.value)} />
                     
                     <label htmlFor="edited-text">Reframe your story</label>
-                    <textarea id="edited-text"  value={textEdit}  onChange={(e) => setTextEdit(e.target.value)}  />
+                    {/* <textarea id="edited-text"  value={textEdit}  onChange={(e) => setTextEdit(e.target.value)}  /> */}
+                    <ReactQuill
+                        theme="snow"
+                        value={textEdit}
+                        onChange={setTextEdit}
+                    />
                     
                     <button type="submit">Save</button>
                 </form>
