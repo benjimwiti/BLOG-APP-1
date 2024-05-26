@@ -12,7 +12,7 @@ function EditPost() {
     const navigate = useNavigate()
     
     const {postId} = useParams()
-    const [postObject , setPostObject] = useState(null)
+    const [postObject , setPostObject] = useState({})
     const [titleEdit, setTitleEdit] = useState('')
     const [textEdit, setTextEdit] = useState('')
     //  const blogTitle = postObject.blogTitle
@@ -23,30 +23,26 @@ function EditPost() {
     
 
     useEffect(() => {
-        const fetchPostList = async () => {
-            try {
-                const postDoc = doc(createNewPostRef, postId);
-                const postSnapShot = await getDoc(postDoc);
-                console.log(postSnapShot.data())
-                //const postObjectSnap = postSnapShot.data()
-                
-                if (postSnapShot.exists()) {
-                    setPostObject(postSnapShot.data());
-                    setTitleEdit(postObject.blogTitle)
-                    setTextEdit(postObject.blogText)
-                } else {
-                    console.log("Post not found!");
-                }
-            } 
-            
-            catch (error) {
-                console.error("Error fetching post data:", error);
+        const fetchPost = async () => {
+          try {
+            const postDoc = doc(createNewPostRef, postId);
+            const postSnapShot = await getDoc(postDoc);
+    
+            if (postSnapShot.exists()) {
+              const postObjectSnap = postSnapShot.data();
+              setPostObject(postObjectSnap);
+              setTitleEdit(postObjectSnap.blogTitle);
+              setTextEdit(postObjectSnap.blogText);
+            } else {
+              console.log("Post not found!");
             }
-            
-        }
-        fetchPostList()
-    },[])
-    console.log(postId)
+          } catch (error) {
+            console.error("Error fetching post data:", error);
+          }
+        };
+    
+        fetchPost();
+      }, [postId]);
 //     const handlePostFetch = async () => {
 //     const postRef = doc(createNewPostRef, postId)
 //     const result = await getDoc(postRef)
@@ -83,6 +79,7 @@ function EditPost() {
                     <label htmlFor="edited-text">Reframe your story</label>
                     {/* <textarea id="edited-text"  value={textEdit}  onChange={(e) => setTextEdit(e.target.value)}  /> */}
                     <ReactQuill
+                        className="ql-editor"
                         theme="snow"
                         value={textEdit}
                         onChange={setTextEdit}

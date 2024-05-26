@@ -71,14 +71,24 @@ export default function Home() {
 
     //INDIVIDUAL POST -you want to change sth about the individual post
     console.log(userId, )
+    function changeBlogcontainerheight (event) {
+        event.target.parentElement.classList.toggle("auto-height")
+    } 
+
     const postElements = postsList.map(post => {
+        const blogTextArray = post.blogText.split("\n")
+        const firstLine = blogTextArray[0]
         const authorId = post.author.id
+        const blogHtmlContent = post.blogText
        return( 
        <div key={post.id} className="blog-card">
             <div className="user-info-container">@{post.author.name}</div>
             <div className="blog-title">{post.blogTitle}</div>
-            <div className="blog-text">{post.blogText}</div>
-            
+            {/* <div className="blog-text"> */}{/* post.blogText */}{/* </div> */} {/* rendering from the onSnapShotDocs */}
+ 
+        <div className="blog-text" onClick={(event)=> changeBlogcontainerheight(event)} dangerouslySetInnerHTML={{ __html: blogHtmlContent }} />
+    
+
             <div className="delete-btn-container">
 
 

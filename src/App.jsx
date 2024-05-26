@@ -59,7 +59,7 @@ function App() {
             <Link to="/login" > Login </Link> :
           <>
             <Link to="/create-post" > Create New post </Link>
-            <Link className='chat-bot-btn' to ="/chat-bot" > AI chat </Link>
+            <Link className='chat-bot-btn' to ="https://chatbott-4lsu4m7jg7kcjbqwhvbjqi.streamlit.app/" > AI chat </Link>
             <button className='sign-out-btn' onClick={signOutfn} > Sign Out</button>
           </>
           }

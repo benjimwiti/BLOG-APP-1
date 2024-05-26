@@ -91,6 +91,7 @@ a:hover {
   margin: 1rem;
   height: 299px;
   padding: 4px;
+  overflow: hidden;
 }
 
 
@@ -166,4 +167,14 @@ a:hover {
   display: flex;
   flex-direction: column;
 
+}
+
+.ql-editor {
+  height: 12rem;
+  background-color: whitesmoke;
+  color: black;
+}
+
+.auto-height {
+  height: auto;
 }
