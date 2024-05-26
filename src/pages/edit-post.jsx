@@ -8,6 +8,8 @@ function EditPost() {
   const [postObject, setPostObject] = useState(null);
   const [titleEdit, setTitleEdit] = useState('');
   const [textEdit, setTextEdit] = useState('');
+  const [tagsEdit, setTagsEdit] = useState('');
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +23,7 @@ function EditPost() {
           setPostObject(postObjectSnap);
           setTitleEdit(postObjectSnap.blogTitle);
           setTextEdit(postObjectSnap.blogText);
+          setTagsEdit(postObjectSnap.tags.join(", "));
         } else {
           console.log("Post not found!");
         }
@@ -39,6 +42,8 @@ function EditPost() {
       await updateDoc(postDoc, {
         blogTitle: titleEdit,
         blogText: textEdit,
+        tags: tagsEdit.split(",").map(tag => tag.trim()), // Split tags by comma and trim whitespace
+       
       });
       console.log("Post updated successfully!");
       navigate("/"); // Redirect to the home page after saving
@@ -46,6 +51,8 @@ function EditPost() {
       console.error("Error updating post:", error);
     }
   };
+
+
 
   if (!postObject) {
     return <p>Loading...</p>;
@@ -70,6 +77,16 @@ function EditPost() {
             value={textEdit}
             onChange={(e) => setTextEdit(e.target.value)}
           />
+
+          <label htmlFor="edited-tags">Edit Tags (comma-separated)</label>
+          <input
+            type="text"
+            id="edited-tags"
+            value={tagsEdit}
+            onChange={(e) => setTagsEdit(e.target.value)}
+          />
+
+          
 
           <button type="submit">Save</button>
         </form>

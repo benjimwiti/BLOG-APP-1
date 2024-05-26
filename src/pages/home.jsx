@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getDocs, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { createNewPostRef, auth } from "../firebase-config";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,11 +18,13 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = onSnapshot(createNewPostRef, (snapshot) => {
       const complexPostsArray = snapshot.docs;
-      const simplePostsArray = complexPostsArray.map(post => ({
+      const simplePostsArray = complexPostsArray.map((post) => ({
         ...post.data(),
-        id: post.id
+        id: post.id,
       }));
-      const sortedArray = simplePostsArray.sort((a, b) => b.createdAt - a.createdAt);
+      const sortedArray = simplePostsArray.sort(
+        (a, b) => b.createdAt - a.createdAt
+      );
       setPostsList(sortedArray);
     });
     return unsubscribe;
@@ -35,17 +37,19 @@ export default function Home() {
 
   const navigate = useNavigate();
 
-  const filteredPosts = postsList.filter(post =>
+  const filteredPosts = postsList.filter((post) =>
     post.blogTitle.toLowerCase().includes(search.toLowerCase())
   );
 
-  const postElements = filteredPosts.map(post => {
+  const postElements = filteredPosts.map((post) => {
     const authorId = post.author.id;
+    const tagsString = post.tags ? post.tags.join(", ") : ""; // Check if tags is defined
     return (
       <div key={post.id} className="blog-card">
         <div className="user-info-container">@{post.author.name}</div>
         <div className="blog-title">{post.blogTitle}</div>
         <div className="blog-text">{post.blogText}</div>
+        <div className="tags">Tags: {tagsString}</div> {/* Display tags with commas */}
         <div className="like-comment-container">
           <LikeButton post={post} />
           <Link to={`/post/${post.id}`}>Comments</Link>
@@ -67,6 +71,10 @@ export default function Home() {
       </div>
     );
   });
+  
+  
+  
+  
 
   return (
     <>
@@ -74,13 +82,13 @@ export default function Home() {
         <p className="p-el">HOME PAGE</p>
         <form>
           <input
-            onChange={(e => { setSearch(e.target.value) })}
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
             placeholder="Search Blog by title"
           />
         </form>
-        <div className="blog-posts">
-          {postElements}
-        </div>
+        <div className="blog-posts">{postElements}</div>
       </main>
       <button onClick={() => setCount(count + 1)}>count</button>
       <footer></footer>
