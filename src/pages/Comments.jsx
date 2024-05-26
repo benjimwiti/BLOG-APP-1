@@ -40,21 +40,23 @@ export default function Comments() {
     if (!post) return <div>Loading...</div>;
 
     return (
-        <div>
-            <h2 className="commentSectionTitle">Comments for {post.blogTitle}</h2>
-            <div>
-                {commentsContent}
-            </div>
-            {userId && (
-                <div>
-                    <input
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Add a comment"
-                    />
-                    <button onClick={addComment}>Add Comment</button>
+        <div className="comments-page-container">
+            <div className="comments-container">
+                <h2 className="commentSectionTitle">Comments for {post.blogTitle}</h2>
+                <div className="comments-content">
+                    {commentsContent}
                 </div>
-            )}
+                {userId && (
+                    <div className="add-comment-container">
+                        <input
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            placeholder="Add a comment"
+                        />
+                        <button onClick={addComment}>Add Comment</button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getDocs, deleteDoc, doc, onSnapshot } from "firebase/firestore";
-import { createNewPostRef, auth } from "../firebase-config";
+import { getDocs, deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
+import { createNewPostRef, auth, db } from "../firebase-config";
 import { Link, useNavigate } from "react-router-dom";
 import LikeButton from "./LikeButton";
 import Comments from "./Comments";
@@ -14,6 +14,7 @@ export default function Home() {
   const [postsList, setPostsList] = useState([]);
   const [count, setCount] = useState(0);
   const [search, setSearch] = useState("");
+  const [followingMap, setFollowingMap] = useState({});
 
   useEffect(() => {
     const unsubscribe = onSnapshot(createNewPostRef, (snapshot) => {
@@ -27,6 +28,18 @@ export default function Home() {
       );
       setPostsList(sortedArray);
     });
+
+    // Fetch following status for current user
+    const fetchFollowingStatus = async () => {
+      const followingRef = doc(db, "following", userId);
+      const followingSnapshot = await getDocs(followingRef);
+      const followingData = followingSnapshot.data();
+      if (followingData) {
+        setFollowingMap(followingData);
+      }
+    };
+    fetchFollowingStatus();
+
     return unsubscribe;
   }, []);
 
@@ -41,15 +54,43 @@ export default function Home() {
     post.blogTitle.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleFollow = async (authorId) => {
+    const followingRef = doc(db, "following", userId);
+    const followingData = followingMap || {};
+    followingData[authorId] = true; // Follow author
+    await setDoc(followingRef, followingData, { merge: true });
+    setFollowingMap({ ...followingMap, [authorId]: true });
+  };
+
+  const handleUnfollow = async (authorId) => {
+    const followingRef = doc(db, "following", userId);
+    const followingData = followingMap || {};
+    delete followingData[authorId]; // Unfollow author
+    await setDoc(followingRef, followingData, { merge: true });
+    setFollowingMap({ ...followingMap, [authorId]: false });
+  };
+
+  const followButtonText = (authorId) => {
+    return followingMap && followingMap[authorId] === true ? "Following" : "Follow";
+  };
+
   const postElements = filteredPosts.map((post) => {
     const authorId = post.author.id;
-    const tagsString = post.tags ? post.tags.join(", ") : ""; // Check if tags is defined
+    const isFollowing = followingMap && followingMap[authorId] === true;
+    const tagsString = post.tags ? post.tags.join(", ") : "";
     return (
       <div key={post.id} className="blog-card">
-        <div className="user-info-container">@{post.author.name}</div>
+        <div className="user-info-container">
+          @{post.author.name}
+          {userId !== authorId && ( // Show follow/unfollow button only if not the author
+            <button onClick={() => (isFollowing ? handleUnfollow(authorId) : handleFollow(authorId))}>
+              {followButtonText(authorId)}
+            </button>
+          )}
+        </div>
         <div className="blog-title">{post.blogTitle}</div>
         <div className="blog-text">{post.blogText}</div>
-        <div className="tags">Tags: {tagsString}</div> {/* Display tags with commas */}
+        <div className="tags">Tags: {tagsString}</div>
         <div className="like-comment-container">
           <LikeButton post={post} />
           <Link to={`/post/${post.id}`}>Comments</Link>
@@ -71,10 +112,6 @@ export default function Home() {
       </div>
     );
   });
-  
-  
-  
-  
 
   return (
     <>
