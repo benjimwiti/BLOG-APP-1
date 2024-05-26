@@ -41,7 +41,7 @@ export default function Comments() {
 
     return (
         <div>
-            <h2>Comments for {post.blogTitle}</h2>
+            <h2 className="commentSectionTitle">Comments for {post.blogTitle}</h2>
             <div>
                 {commentsContent}
             </div>
