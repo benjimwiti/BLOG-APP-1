@@ -95,7 +95,7 @@ export default function Home() {
       // setHasChangedFollow(true) // raising the flag
   console.log('flag up') 
   window.addEventListener('load', ()=> {
-    document.body.style.backgroundImage = `url(../assets/react.svg)`
+    document.body.style.backgroundColor = `pink`
 
   })
   console.log(followingRef)
