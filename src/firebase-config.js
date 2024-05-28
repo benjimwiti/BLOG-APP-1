@@ -27,3 +27,4 @@ export const db = getFirestore(app)
 
 export const createNewPostRef = collection(db, 'createNewPost')
 export const newRef = collection(db ,"test2")
+export const followingRef = collection(db, "follow #2")

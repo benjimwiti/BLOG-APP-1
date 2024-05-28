@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import { getDocs , deleteDoc, doc, onSnapshot} from "firebase/firestore";
-import { createNewPostRef , auth } from "../firebase-config";
+import { getDocs , deleteDoc, doc, onSnapshot, setDoc} from "firebase/firestore";
+import { createNewPostRef , auth, followingRef } from "../firebase-config";
 import App from "../App";
 import { BrowserRouter as Router , Routes , Route , Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -57,6 +57,8 @@ export default function Home() {
             })
             return unsubscribe
         },[])
+
+        
    
 
     async function deletePost(id) {
@@ -66,11 +68,46 @@ export default function Home() {
 
     const navigate = useNavigate()
     
+    const [following , setFollowing] = useState({})
 
-    
+   
+/*FOLLOW STATUS */
+    // useEffect( async () => {
+    //   const personalFollowRef = await doc(followingRef, userId)
+    //   const unsubscribe = onSnapshot(followingRef , (followingSnap) => {
+    //     console.log('fetching following')
+    //   })
+    // },[following])
+
+    const toggleFollow = (authorId) => {
+      const personalFollowRef = doc(followingRef, userId)
+      /* handle unfollow */
+      if(following[authorId]){
+        setFollowing(prevFollowing => (
+          {
+            ...prevFollowing ,
+            [authorId] : false
+          }
+        ))
+      console.log('unfollow')
+      setDoc(personalFollowRef, {[authorId]: false} , {merge : true})
+      } 
+      /*handle follow*/
+      else {
+        setFollowing(prevFollowing => (
+          {
+            ...prevFollowing ,
+            [authorId] : true
+          }
+        ))
+        console.log('follow')
+        setDoc(personalFollowRef, {[authorId] : true} , {merge : true})
+      }
+    }
+ /* FOLLOW STATUS */
 
     //INDIVIDUAL POST -you want to change sth about the individual post
-    console.log(userId, )
+    console.log(userId)
     function changeBlogcontainerheight (event) {
         event.target.parentElement.classList.toggle("auto-height")
     } 
@@ -78,19 +115,27 @@ export default function Home() {
     const postElements = postsList.map(post => {
         const blogTextArray = post.blogText.split("\n")
         const firstLine = blogTextArray[0]
+        const secondLine = blogTextArray[1]
         const authorId = post.author.id
         const blogHtmlContent = post.blogText
-       return( 
+       
+       
+        return( 
        <div key={post.id} className="blog-card">
             <div className="user-info-container">@{post.author.name}</div>
             <div className="blog-title">{post.blogTitle}</div>
             {/* <div className="blog-text"> */}{/* post.blogText */}{/* </div> */} {/* rendering from the onSnapShotDocs */}
  
-        <div className="blog-text" onClick={(event)=> changeBlogcontainerheight(event)} dangerouslySetInnerHTML={{ __html: blogHtmlContent }} />
+        <div className="blog-text" onClick={
+          (event)=> changeBlogcontainerheight(event)} 
+          dangerouslySetInnerHTML={{ __html: blogHtmlContent 
+            }} 
+          />
     
 
-            <div className="delete-btn-container">
+            {/* author privileges */}
 
+            <div className="delete-btn-container">
 
                {
                 isAuth &&
@@ -109,6 +154,19 @@ export default function Home() {
                 }
 
             </div>
+            {/* author privileges */}
+
+            {/* follow */}
+
+            <div className="follow-btn-container">
+              <button className="follow-btn" onClick={()=> {
+                toggleFollow(authorId)
+              }} >
+                {following[authorId] ? "Unfollow" : "Follow"}
+
+              </button>
+            </div>
+        
         </div>
        )
     })
