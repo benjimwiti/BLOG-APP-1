@@ -4,18 +4,33 @@ import { createNewPostRef , auth, followingRef } from "../firebase-config";
 import App from "../App";
 import { BrowserRouter as Router , Routes , Route , Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+//import { useAuthState } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
+import {app} from "../firebase-config"
 
-const isAuth = localStorage.getItem("isAuth") || ""
+
+
+
+const isAuth = localStorage.getItem("isAuth") || false
 
 
 export default function Home() {
+  
     //console.log(loggedIn)
     
     const userName = auth.currentUser?  auth.currentUser.displayName : false//"not-logged-in"
     const userId = auth.currentUser? auth.currentUser.uid : false //not logged in
+    console.log(userId)
+    
+    // const authCurrent = getAuth(app)
+    // console.log(authCurrent.currentUser.uid)
+    // const [user] = useAuthState(auth);
+    // console.log(user)
 
     const [postsList, setPostsList] = useState([])
     const [count, setCount] = useState(0)
+
+    //const[userID, setUserID] = useState('')
 
     // SYNCING LOCAL STATE TO FIRESTORE
 
@@ -38,49 +53,67 @@ export default function Home() {
     //     console.log(postsList)
     //     return () => console.log("cleaning up")
     // }, [/* postsList */])
-
     
-        useEffect(() => {
-            const unsubscribe = onSnapshot(createNewPostRef, (onSnapshot)=> {
-                const complexPostsArray = onSnapshot.docs
-                const simplePostsArray = complexPostsArray.map(post => (
-                    {
-                    ...post.data() ,
-                    id : post.id
-                   
-                    }
-                ))
-                const sortedArray = simplePostsArray.sort((a, b) => b.createdAt - a.createdAt )
-                setPostsList(simplePostsArray)
-                //setPostsList(sortedArray)
-                console.log(sortedArray)
-            })
-            return unsubscribe
-        },[])
-
-        
-   
-
+    
+    useEffect(() => {
+      const unsubscribe = onSnapshot(createNewPostRef, (onSnapshot)=> {
+        const complexPostsArray = onSnapshot.docs
+        const simplePostsArray = complexPostsArray.map(post => (
+          {
+            ...post.data() ,
+            id : post.id
+            
+          }
+        ))
+        const sortedArray = simplePostsArray.sort((a, b) => b.createdAt - a.createdAt )
+        setPostsList(simplePostsArray)
+        //setPostsList(sortedArray)
+        console.log(sortedArray)
+      })
+      
+      return unsubscribe
+    },[])
+    
+    
+    
+    
     async function deletePost(id) {
-        const postDoc = doc(createNewPostRef, id)
-        await deleteDoc(postDoc)
+      const postDoc = doc(createNewPostRef, id)
+      await deleteDoc(postDoc)
     }
-
+    
     const navigate = useNavigate()
     
     const [following , setFollowing] = useState({})
+    const [hasChangedFollow, setHasChangedFollow] = useState(false)
+    
+    
+    /*FOLLOW STATUS */
+    useEffect( () => {
+      console.log('flag down')
+      // if (hasChangedFollow)  return 
+      // setHasChangedFollow(true) // raising the flag
+  console.log('flag up') 
+  window.addEventListener('load', ()=> {
+    document.body.style.backgroundImage = `url(../assets/react.svg)`
 
-   
-/*FOLLOW STATUS */
-    // useEffect( async () => {
-    //   const personalFollowRef = await doc(followingRef, userId)
-    //   const unsubscribe = onSnapshot(followingRef , (followingSnap) => {
-    //     console.log('fetching following')
-    //   })
-    // },[following])
-
-    const toggleFollow = (authorId) => {
-      const personalFollowRef = doc(followingRef, userId)
+  })
+  console.log(followingRef)
+  console.log(userId)
+  const personalFollowRef =  doc(followingRef, userId)
+      const unsubscribeMe = onSnapshot(personalFollowRef, (followingSnap) => {
+        console.log('fetched following')
+        console.log(followingSnap.data())
+        setFollowing(followingSnap.data())
+      }
+    )
+  setTimeout( ()=> {
+    console.log('ran timeout')
+  }, 5000)
+},[hasChangedFollow])
+    
+const toggleFollow = (authorId) => {
+  const personalFollowRef = doc(followingRef, userId)
       /* handle unfollow */
       if(following[authorId]){
         setFollowing(prevFollowing => (
@@ -158,14 +191,17 @@ export default function Home() {
 
             {/* follow */}
 
+           {isAuth && userId != authorId &&
             <div className="follow-btn-container">
               <button className="follow-btn" onClick={()=> {
                 toggleFollow(authorId)
+                /* setHasChangedFollow(false) */
               }} >
                 {following[authorId] ? "Unfollow" : "Follow"}
 
               </button>
             </div>
+          }
         
         </div>
        )
