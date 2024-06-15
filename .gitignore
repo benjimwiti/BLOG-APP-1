@@ -25,3 +25,6 @@ dist-ssr
 
 travelbot/.venv
 travelbot/env
+travelbot/.env
+env
+.env
