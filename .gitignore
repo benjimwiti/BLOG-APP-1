@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 travelbot/.venv
-travelbot/.env
+travelbot/env
