@@ -1,0 +1,16 @@
+ctransformers
+sentence-transformers==2.2.2
+pinecone-client
+langchain==0.0.225
+flask
+pypdf
+python-dotenv
+pinecone
+langchain_community
+sentence_transformers
+langchain_pinecone
+flask
+--upgrade sentence_transformers
+--upgrade langchain
+openai
+-e .
