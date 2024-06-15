@@ -1,0 +1,5 @@
+setup.py
+Travel_Bot.egg-info/PKG-INFO
+Travel_Bot.egg-info/SOURCES.txt
+Travel_Bot.egg-info/dependency_links.txt
+Travel_Bot.egg-info/top_level.txt
